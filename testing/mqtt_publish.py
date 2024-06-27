@@ -14,7 +14,8 @@ mqtt_password = os.getenv("MQTT_PASSWORD")
 broker = "localhost"
 port = 1883
 topic = "test/topic"
-client_id = "mqtt_publisher"
+topic = "irrigation/thuja"
+# client_id = "mqtt_publisher"
 username = mqtt_username
 password = mqtt_password
 
@@ -39,29 +40,36 @@ for i in range(5):
     time.sleep(1)  # Delay between messages
 
 # LED TEST
-time.sleep(1)
-client.publish(topic, "TURN_ON")
+if topic == "irrigation/thuja":
+    sleep_time = 0.2
+    message = "thuja_irrigation"
+else:
+    sleep_time = 2
+    message = "TURN"
+
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_ON")
 print("turning on")
-time.sleep(1)
-client.publish(topic, "TURN_OFF")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_OFF")
 print("turning off")
-time.sleep(1)
-client.publish(topic, "TURN_ON")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_ON")
 print("turning on")
-time.sleep(1)
-client.publish(topic, "TURN_OFF")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_OFF")
 print("turning off")
-time.sleep(1)
-client.publish(topic, "TURN_ON")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_ON")
 print("turning on")
-time.sleep(1)
-client.publish(topic, "TURN_OFF")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_OFF")
 print("turning off")
-time.sleep(1)
-client.publish(topic, "TURN_ON")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_ON")
 print("turning on")
-time.sleep(1)
-client.publish(topic, "TURN_OFF")
+time.sleep(sleep_time)
+client.publish(topic, f"{message}_OFF")
 print("turning off")
 
 # Disconnect from the broker
