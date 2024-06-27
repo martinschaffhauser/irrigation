@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker compose -f mosquitto.yml -p iot_mqtt up -d
