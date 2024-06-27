@@ -10,3 +10,5 @@ services:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
       - ./mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+
