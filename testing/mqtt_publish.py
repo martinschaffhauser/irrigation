@@ -4,7 +4,7 @@ import paho.mqtt.client as mqtt
 import time
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv("../cred.env")
 
 # Get the username and password from environment variables
 mqtt_username = os.getenv("MQTT_USER")
