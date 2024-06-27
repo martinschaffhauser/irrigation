@@ -127,16 +127,4 @@ void controlLogic(const String &topic, const String &message)
     message.toCharArray(desiredinterrupt, 8);
     client.publish("irrigation/wateramountvalue", desiredinterrupt);
   }
-
-  else if (topic == "test/topic")
-  {
-    if (message == "TURN_ON")
-    {
-      digitalWrite(LED_BUILTIN, LOW); // Turn the LED on
-    }
-    else if (message == "TURN_OFF")
-    {
-      digitalWrite(LED_BUILTIN, HIGH); // Turn the LED off
-    }
-  }
 }

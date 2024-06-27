@@ -13,7 +13,7 @@ mqtt_password = os.getenv("MQTT_PASSWORD")
 # Define the MQTT broker details
 broker = "localhost"
 port = 1883
-topic = "test/topic"
+# topic = "test/topic"
 topic = "irrigation/thuja"
 # client_id = "mqtt_publisher"
 username = mqtt_username
