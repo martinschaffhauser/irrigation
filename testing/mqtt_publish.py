@@ -1,13 +1,22 @@
+from dotenv import load_dotenv
+import os
 import paho.mqtt.client as mqtt
 import time
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the username and password from environment variables
+mqtt_username = os.getenv("MQTT_USER")
+mqtt_password = os.getenv("MQTT_PASSWORD")
 
 # Define the MQTT broker details
 broker = "localhost"
 port = 1883
 topic = "test/topic"
 client_id = "mqtt_publisher"
-username = "martin"
-password = "sofi"
+username = mqtt_username
+password = mqtt_password
 
 # Create a new MQTT client instance with the correct API version
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)

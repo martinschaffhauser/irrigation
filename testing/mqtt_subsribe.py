@@ -1,12 +1,21 @@
+from dotenv import load_dotenv
+import os
 import paho.mqtt.client as mqtt
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the username and password from environment variables
+mqtt_username = os.getenv("MQTT_USER")
+mqtt_password = os.getenv("MQTT_PASSWORD")
 
 # Define the MQTT broker details
 broker = "localhost"
 port = 1883
 topic = "test/topic"
 client_id = "mqtt_subscriber"
-username = "martin"
-password = "sofi"
+username = mqtt_username
+password = mqtt_password
 
 
 # Callback function when a message is received
