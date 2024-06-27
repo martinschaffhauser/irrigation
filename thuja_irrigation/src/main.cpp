@@ -6,13 +6,20 @@
 #include "mqtt_setup.h"
 #include "ota_setup.h"
 
-// definitions
+// Definitions
 #define LED_BUILTIN 2
 const int relay = 4;                // is D2 on Wemos board, but 4 in Arduino IDE
 const byte interruptPin = 5;        // is D1 on Wemos board, but 5 in Arduino IDE
 volatile byte interruptCounter = 0; // all water flow measurement - Specifically, it directs the compiler to load the variable from RAM and not fr    om a storage register, which is a temporary memory location where program variables are stored and manipulated. Under certain conditions, the valu    e for a variable stored in registers can be inaccurate. A variable should be declared volatile whenever its value can be changed by something beyo    nd the control of the code section in which it appears, such as a concurrently executing thread. In the Arduino, the only place that this is likel    y to occur is in sections of code associated with interrupts, called an interrupt service routine.
 int numberOfInterrupts = 0;         // all water flow measurement
 char desiredinterrupt[8];
+
+// Interrupt function for waterflow measurement
+// void ICACHE_RAM_ATTR handleInterrupt()
+void IRAM_ATTR handleInterrupt() // since ICACHE_RAM_ATTR is deprecated
+{                                // Your interrupt service routines need to be in ram, not flash. Make them all look like this: void ICACHE_RAM_ATTR pulseCounter_1() * https://github.com/esp8266/Arduino/issues/4468
+  interruptCounter++;
+}
 
 void setup()
 {
@@ -31,6 +38,10 @@ void setup()
   // Pin Setup
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH); // HIGH for builtin led is actually off!
+  pinMode(relay, OUTPUT);
+  pinMode(interruptPin, INPUT_PULLUP); // https://techtutorialsx.com/2016/12/11/esp8266-external-interrupts/
+  attachInterrupt(digitalPinToInterrupt(interruptPin), handleInterrupt, CHANGE);
+  digitalWrite(relay, LOW); // when esp powers on, the valve should be turned off - relay off
 }
 
 void loop()
@@ -60,8 +71,20 @@ void loop()
   }
   client.loop();
 
-  // Your main code here
-  // TelnetStream.println("=== main code loop is running ===");
+  // MAIN CODE
+  // read out the volatile byte interruptCounter so it does not overflow - translate it into int numberOfInterrupts
+  if (interruptCounter > 0)
+  {
+    interruptCounter--;
+    numberOfInterrupts++;
+  }
+
+  // leave irrigation on until desiredinterrupt is reached
+  if (numberOfInterrupts >= atoi(desiredinterrupt))
+  {
+    digitalWrite(relay, LOW);
+    numberOfInterrupts = 0;
+  }
 }
 
 // Function that runs control logic upon MQTT messages
@@ -81,6 +104,28 @@ void controlLogic(const String &topic, const String &message)
       TelnetStream.println("Turned Thuja Relay OFF");
       Serial.println("Turned Thuja Relay OFF");
     }
+  }
+
+  // ask for the value of the interruptCounter
+  if (topic == "irrigatioin/waterflow")
+  {
+    if (message == "readinterrupts")
+    {
+      static char interruptcount[5];
+      itoa(numberOfInterrupts, interruptcount, 10); // convert int interruptCounter to char for PubSubClient
+      client.publish("irrigation/waterflowresponse", interruptcount);
+    }
+    if (message == "reset")
+    {
+      numberOfInterrupts = 0;
+    }
+  }
+
+  // send desired interruptcount
+  if (topic == "irrigation/wateramount")
+  {
+    message.toCharArray(desiredinterrupt, 8);
+    client.publish("irrigation/wateramountvalue", desiredinterrupt);
   }
 
   else if (topic == "test/topic")
