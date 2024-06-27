@@ -8,7 +8,7 @@
 
 // Definitions
 #define LED_BUILTIN 2
-const int relay = 4;                // is D2 on Wemos board, but 4 in Arduino IDE
+const int relay = 4;                // CAVE: D4 == D4
 const byte interruptPin = 5;        // is D1 on Wemos board, but 5 in Arduino IDE
 volatile byte interruptCounter = 0; // all water flow measurement - Specifically, it directs the compiler to load the variable from RAM and not fr    om a storage register, which is a temporary memory location where program variables are stored and manipulated. Under certain conditions, the valu    e for a variable stored in registers can be inaccurate. A variable should be declared volatile whenever its value can be changed by something beyo    nd the control of the code section in which it appears, such as a concurrently executing thread. In the Arduino, the only place that this is likel    y to occur is in sections of code associated with interrupts, called an interrupt service routine.
 int numberOfInterrupts = 0;         // all water flow measurement
@@ -95,14 +95,14 @@ void controlLogic(const String &topic, const String &message)
     if (message == "thuja_irrigation_ON")
     {
       digitalWrite(relay, HIGH);
-      digitalWrite(LED_BUILTIN, HIGH);
+      digitalWrite(LED_BUILTIN, LOW); // CAVE for that LED its LOW/HIGH is the other way round
       TelnetStream.println("Turned Thuja Relay ON");
       Serial.println("Turned Thuja Relay ON");
     }
     else if (message == "thuja_irrigation_OFF")
     {
       digitalWrite(relay, LOW);
-      digitalWrite(LED_BUILTIN, LOW);
+      digitalWrite(LED_BUILTIN, HIGH); // CAVE for that LED its LOW/HIGH is the other way round
       TelnetStream.println("Turned Thuja Relay OFF");
       Serial.println("Turned Thuja Relay OFF");
     }
