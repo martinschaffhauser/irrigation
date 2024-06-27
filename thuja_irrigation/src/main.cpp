@@ -95,12 +95,14 @@ void controlLogic(const String &topic, const String &message)
     if (message == "thuja_irrigation_ON")
     {
       digitalWrite(relay, HIGH);
+      digitalWrite(LED_BUILTIN, HIGH);
       TelnetStream.println("Turned Thuja Relay ON");
       Serial.println("Turned Thuja Relay ON");
     }
     else if (message == "thuja_irrigation_OFF")
     {
       digitalWrite(relay, LOW);
+      digitalWrite(LED_BUILTIN, LOW);
       TelnetStream.println("Turned Thuja Relay OFF");
       Serial.println("Turned Thuja Relay OFF");
     }
