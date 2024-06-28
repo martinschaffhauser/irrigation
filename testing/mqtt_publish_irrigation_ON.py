@@ -29,9 +29,9 @@ client.connect(broker, port)
 
 # LOGIC
 # irrigation_on
-client.publish(topic, "thuja_irrigation_ON")
+# client.publish(topic, "thuja_irrigation_ON")
 # irrigation_off
-# client.publish(topic, "thuja_irrigation_OFF")
+client.publish(topic, "thuja_irrigation_OFF")  # careful off is on
 
 # Disconnect from the broker
 client.disconnect()
