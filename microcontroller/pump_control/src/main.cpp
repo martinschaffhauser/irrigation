@@ -84,14 +84,14 @@ void controlLogic(const String &topic, const String &message)
   {
     if (message == "pump_ON")
     {
-      digitalWrite(relay, HIGH);      // is HIGH ON or OFF?
+      digitalWrite(relay, LOW);       // LOW is ON actually - relay is connected that way
       digitalWrite(LED_BUILTIN, LOW); // CAVE for that LED its LOW/HIGH is the other way round
       TelnetStream.println("Irrigation - cycling pump ON/OFF -> ON");
       Serial.println("Irrigation - cycling pump ON/OFF -> ON");
     }
     else if (message == "pump_OFF")
     {
-      digitalWrite(relay, LOW);        // is LOW ON or OFF?
+      digitalWrite(relay, HIGH);       // HIGH is OFF actually - relay is connected that way
       digitalWrite(LED_BUILTIN, HIGH); // CAVE for that LED its LOW/HIGH is the other way round
       TelnetStream.println("Irrigation - cycling pump ON/OFF -> OFF");
       Serial.println("Irrigation - cycling pump ON/OFF -> OFF");
