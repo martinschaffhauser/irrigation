@@ -28,7 +28,7 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH); // HIGH for builtin led is actually off!
   pinMode(relay, OUTPUT);
-  digitalWrite(relay, LOW); // when esp powers on, the valve should be turned off - relay off
+  digitalWrite(relay, HIGH); // when esp powers on, the valve should be turned off - relay off
 }
 
 void loop()
