@@ -30,10 +30,10 @@ client.connect(broker, port)
 
 
 # LOGIC
-def thuja_irrigation(switch: str) -> None:
+def thuja_irrigation(switch: str, cycles: int) -> None:
     if switch == "ON":
         client.publish(topic_esp_thuja, "thuja_irrigation_ON")
-        pump_cycles = 30  # 30 * (60sec_on + 5sec_off) = 32,5 min
+        pump_cycles = cycles  # 30 * (60sec_on + 5sec_off) = 32,5 min
         for _ in range(pump_cycles):
             client.publish(topic_esp_pump, "pump_ON")
             time.sleep(60)
@@ -45,7 +45,7 @@ def thuja_irrigation(switch: str) -> None:
         client.publish(topic_esp_pump, "pump_OFF")
 
 
-thuja_irrigation("ON")
+thuja_irrigation("ON", 30)
 
 # Disconnect from the broker
 client.disconnect()
