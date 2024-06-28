@@ -8,7 +8,7 @@
 
 // Definitions
 #define LED_BUILTIN 2
-const int relay = 4; // CAVE: D4 == D4
+const int relay = 4; // D2 on board!
 
 void setup()
 {
@@ -69,13 +69,15 @@ void controlLogic(const String &topic, const String &message)
   {
     if (message == "TURN_ON")
     {
-      digitalWrite(LED_BUILTIN, LOW);
-      TelnetStream.println("recieved MQTT to turn builtin led ON");
+      digitalWrite(LED_BUILTIN, LOW); // turn on led
+      digitalWrite(relay, HIGH);
+      TelnetStream.println("recvd test");
     }
     else if (message == "TURN_OFF")
     {
-      digitalWrite(LED_BUILTIN, HIGH);
-      TelnetStream.println("recieved MQTT to turn builtin led OFF");
+      digitalWrite(LED_BUILTIN, HIGH); // turn off led
+      digitalWrite(relay, LOW);
+      TelnetStream.println("recvd test");
     }
   }
 
