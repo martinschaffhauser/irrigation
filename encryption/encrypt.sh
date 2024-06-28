@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Prompt for the file to encrypt
-echo "Which file to encrypt?"
-read file_to_encrypt
+# Check if a file argument was provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <file_to_encrypt>"
+    exit 1
+fi
+
+# Assign the first argument to the file_to_encrypt variable
+file_to_encrypt="$1"
 
 # Prompt for the AGE public key
 echo "Enter the AGE public key:"

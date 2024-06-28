@@ -1,12 +1,17 @@
 #!/bin/bash
 
-# Prompt for the file to decrypt
-echo "Which file to decrypt?"
-read file_to_decrypt
+# Check if a file argument was provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <file_to_decrypt>"
+    exit 1
+fi
+
+# Assign the first argument to the file_to_decrypt variable
+file_to_decrypt="$1"
 
 # Prompt for the AGE private key for decryption
 echo "Enter the AGE private key for decryption:"
-read age_private_key  # -s option hides the input for security
+read -s age_private_key  # -s option hides the input for security
 
 # Extract the directory and base name without the ".encrypted" suffix
 file_dir=$(dirname "$file_to_decrypt")
@@ -32,4 +37,5 @@ if [ $? -eq 0 ]; then
     echo "File decrypted as ${decrypted_file_name}"
 else
     echo "Decryption failed"
+    exit 1
 fi
