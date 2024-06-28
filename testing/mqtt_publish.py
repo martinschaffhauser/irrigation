@@ -14,7 +14,8 @@ mqtt_password = os.getenv("MQTT_PASSWORD")
 broker = "localhost"
 port = 1883
 # topic = "test/topic"
-topic = "irrigation/thuja"
+topic = "test/topic2"
+# topic = "irrigation/thuja"
 # client_id = "mqtt_publisher"
 username = mqtt_username
 password = mqtt_password
@@ -43,8 +44,11 @@ for i in range(5):
 if topic == "irrigation/thuja":
     sleep_time = 0.2
     message = "thuja_irrigation"
-else:
+elif topic == "test/topic":
     sleep_time = 2
+    message = "TURN"
+elif topic == "test/topic2":
+    sleep_time = 0.5
     message = "TURN"
 
 time.sleep(sleep_time)

@@ -7,7 +7,8 @@
 const char *mqtt_server = MQTT_BROKER_IP;
 const char *mqtt_user = MQTT_USER;
 const char *mqtt_password = MQTT_PASSWORD;
-const char *mqtt_topic = MQTT_TOPIC;
+const char *mqtt_topic1 = MQTT_TOPIC_1;
+const char *mqtt_topic2 = MQTT_TOPIC_2;
 const int mqtt_port = 1883;
 
 void setup_mqtt(PubSubClient &client)
@@ -23,11 +24,12 @@ void reconnect_mqtt(PubSubClient &client)
     {
         Serial.print("Attempting MQTT connection...");
         // Attempt to connect
-        if (client.connect("thuja_esp_client", mqtt_user, mqtt_password))
+        if (client.connect("pump_esp_client", mqtt_user, mqtt_password))
         {
             Serial.println("connected");
             // Once connected, subscribe to the topic
-            client.subscribe(mqtt_topic);
+            client.subscribe(mqtt_topic1);
+            client.subscribe(mqtt_topic2);
         }
         else
         {
