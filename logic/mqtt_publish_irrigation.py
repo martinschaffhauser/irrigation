@@ -13,8 +13,9 @@ mqtt_password = os.getenv("MQTT_PASSWORD")
 # Define the MQTT broker details
 broker = "localhost"
 port = 1883
-topic = "irrigation/thuja"
-client_id = "mqtt_publisher"
+topic_esp_thuja = "irrigation/thuja"
+topic_esp_pump = "irrigation/pump"
+client_id = "mqtt_publisher_python_irrigation_script"
 username = mqtt_username
 password = mqtt_password
 
@@ -27,11 +28,24 @@ client.username_pw_set(username, password)
 # Connect to the MQTT broker
 client.connect(broker, port)
 
+
 # LOGIC
-# irrigation_on
-# client.publish(topic, "thuja_irrigation_ON")
-# irrigation_off
-client.publish(topic, "thuja_irrigation_OFF")  # careful off is on
+def thuja_irrigation(switch: str) -> None:
+    if switch == "ON":
+        client.publish(topic_esp_thuja, "thuja_irrigation_ON")
+        pump_cycles = 5  # 5 * 5 seconds 25 seconds
+        for _ in range(pump_cycles):
+            client.publish(topic_esp_pump, "pump_ON")
+            time.sleep(1)
+            client.publish(topic_esp_pump, "pump_OFF")
+            time.sleep(1)
+
+        # eventually turn off everything
+        client.publish(topic_esp_thuja, "thuja_irrigation_OFF")
+        client.publish(topic_esp_pump, "pump_OFF")
+
+
+thuja_irrigation("ON")
 
 # Disconnect from the broker
 client.disconnect()

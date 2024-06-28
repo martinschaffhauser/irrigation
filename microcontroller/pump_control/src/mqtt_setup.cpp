@@ -9,6 +9,7 @@ const char *mqtt_user = MQTT_USER;
 const char *mqtt_password = MQTT_PASSWORD;
 const char *mqtt_topic1 = MQTT_TOPIC_1;
 const char *mqtt_topic2 = MQTT_TOPIC_2;
+const char *mqtt_topic3 = MQTT_TOPIC_3;
 const int mqtt_port = 1883;
 
 void setup_mqtt(PubSubClient &client)
@@ -30,6 +31,7 @@ void reconnect_mqtt(PubSubClient &client)
             // Once connected, subscribe to the topic
             client.subscribe(mqtt_topic1);
             client.subscribe(mqtt_topic2);
+            client.subscribe(mqtt_topic3);
         }
         else
         {

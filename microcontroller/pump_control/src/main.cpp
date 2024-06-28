@@ -79,22 +79,22 @@ void controlLogic(const String &topic, const String &message)
     }
   }
 
-  // LOGIC TO TURN ON/OFF IRRIGATION (OR PUMP)
-  if (topic == "irrigation/thuja")
+  // LOGIC TO TURN ON/OFF PUMP
+  if (topic == "irrigation/pump")
   {
-    if (message == "thuja_irrigation_ON")
+    if (message == "pump_ON")
     {
-      digitalWrite(relay, HIGH);
+      digitalWrite(relay, HIGH);      // is HIGH ON or OFF?
       digitalWrite(LED_BUILTIN, LOW); // CAVE for that LED its LOW/HIGH is the other way round
-      TelnetStream.println("Turned Thuja Relay ON");
-      Serial.println("Turned Thuja Relay ON");
+      TelnetStream.println("Irrigation - cycling pump ON/OFF -> ON");
+      Serial.println("Irrigation - cycling pump ON/OFF -> ON");
     }
-    else if (message == "thuja_irrigation_OFF")
+    else if (message == "pump_OFF")
     {
-      digitalWrite(relay, LOW);
+      digitalWrite(relay, LOW);        // is LOW ON or OFF?
       digitalWrite(LED_BUILTIN, HIGH); // CAVE for that LED its LOW/HIGH is the other way round
-      TelnetStream.println("Turned Thuja Relay OFF");
-      Serial.println("Turned Thuja Relay OFF");
+      TelnetStream.println("Irrigation - cycling pump ON/OFF -> OFF");
+      Serial.println("Irrigation - cycling pump ON/OFF -> OFF");
     }
   }
 }

@@ -8,6 +8,7 @@ extern const char *mqtt_user;
 extern const char *mqtt_password;
 extern const char *mqtt_topic1;
 extern const char *mqtt_topic2;
+extern const char *mqtt_topic3;
 extern const int mqtt_port;
 
 void setup_mqtt(PubSubClient &client);
