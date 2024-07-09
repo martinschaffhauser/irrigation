@@ -30,7 +30,7 @@ client.username_pw_set(username, password)
 client.connect(broker, port)
 
 # Publish messages to the topic
-for i in range(5):
+for i in range(2):
     message = f"Message {i+1}: now the logic that depends on this messag needs to start"
     result = client.publish(topic, message)
     status = result.rc
