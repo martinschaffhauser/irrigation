@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY, script_path TEXT, cron TEXT)

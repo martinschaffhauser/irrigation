@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Scheduler</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input,
+        button {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Job Scheduler</h1>
+        <form id="jobForm">
+            <input type="text" id="jobId" placeholder="Job ID" required>
+            <input type="text" id="scriptPath" placeholder="Script Path" required>
+            <input type="text" id="cron" placeholder="Cron Expression (e.g., * * * * * *)" required>
+            <button type="submit">Add Job</button>
+        </form>
+        <h2>Scheduled Jobs</h2>
+        <table id="jobsTable">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Script Path</th>
+                    <th>Cron</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        document.getElementById('jobForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const jobId = document.getElementById('jobId').value;
+            const scriptPath = document.getElementById('scriptPath').value;
+            const cron = document.getElementById('cron').value;
+            const job = { id: jobId, script_path: scriptPath, cron: cron };
+
+            const response = await fetch(`${API_URL}/jobs/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(job)
+            });
+
+            if (response.ok) {
+                alert('Job added successfully');
+                loadJobs();
+                document.getElementById('jobForm').reset();
+            } else {
+                alert('Error adding job');
+            }
+        });
+
+        async function loadJobs() {
+            const response = await fetch(`${API_URL}/jobs/`);
+            const data = await response.json();
+            const tbody = document.getElementById('jobsTable').querySelector('tbody');
+            tbody.innerHTML = '';
+            data.jobs.forEach(job => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${job[0]}</td>
+                    <td>${job[1]}</td>
+                    <td>${job[2]}</td>
+                    <td><button onclick="deleteJob('${job[0]}')">Delete</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function deleteJob(jobId) {
+            const response = await fetch(`${API_URL}/jobs/${jobId}`, { method: 'DELETE' });
+            if (response.ok) {
+                alert('Job deleted successfully');
+                loadJobs();
+            } else {
+                alert('Error deleting job');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadJobs);
+    </script>
+</body>
+
+</html>
