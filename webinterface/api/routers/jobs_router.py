@@ -1,28 +1,23 @@
 import logging
 import sqlite3
-
 from fastapi import APIRouter, status, HTTPException
 from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
-
 from pydantic import BaseModel
-
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.base import JobLookupError
 from apscheduler.triggers.cron import CronTrigger
 
-from api.operations.token_validation import validate_token
-from api.operations.scheduler import scheduler, schedule_job, log_scheduled_jobs
-from api.operations.scheduler import start_scheduler, shutdown_scheduler
+# custom imports
 from api.operations.database import read_sql_statement
+from api.operations.scheduler import scheduler, schedule_job, log_scheduled_jobs
 from api.routers.limiter import limiter
+from api.operations.token_validation import validate_token
 from log_config import setup_logging
 
 setup_logging()
 
 router = APIRouter(prefix="/jobs")
-scheduler = BackgroundScheduler()
-scheduler.start()
 
 # OAuth2 Password Bearer Token
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -71,9 +66,9 @@ def delete_job(
     logging.info(f"delete job endpoint was hit with deletion of job id: {job_id}")
 
     try:
-        # SHUTTING DOWN SCHEDULER TO THEN REMOVE JOB FROM DB
-        # TODO: better implementation of removing jobs from scheduler; scheduler.remove_job(job_id) just does not work
-        shutdown_scheduler()
+        # Removing the job from the scheduler
+        scheduler.remove_job(job_id)
+        # Deleting the job from the database
         sql_statement = read_sql_statement(
             "api/operations/sql_statements/delete_job.sql"
         )
@@ -82,9 +77,9 @@ def delete_job(
         c.execute(sql_statement, (job_id,))
         conn.commit()
         conn.close()
-        # RESTART SCHEDULER TO LOAD JOBS FROM DB
-        start_scheduler()
         return {"message": "Job deleted successfully"}
+    except JobLookupError:
+        raise HTTPException(status_code=404, detail=f"Job {job_id} not found")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

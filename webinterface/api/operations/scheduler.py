@@ -1,7 +1,9 @@
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
 import sqlite3
 import logging
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+
+# custom imports
 from api.operations.jobs import run_script
 from api.operations.database import init_db, read_sql_statement
 from log_config import setup_logging
