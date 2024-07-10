@@ -14,8 +14,30 @@
         <h1>Irrigation Job Scheduler</h1>
         <form id="jobForm">
             <input type="text" id="jobId" placeholder="Job ID" required>
+            <input type="text" id="jobDescription" placeholder="Job Description" required>
             <input type="text" id="scriptPath" placeholder="Script Path" required>
-            <input type="text" id="cron" placeholder="Cron Expression (e.g., * * * * * *)" required>
+            <div>
+                <input type="radio" id="autoCron" name="cronType" value="auto" checked>
+                <label for="autoCron">Automatic</label>
+                <input type="radio" id="manualCron" name="cronType" value="manual">
+                <label for="manualCron">Manual</label>
+            </div>
+            <div id="cronInputs">
+                <label for="minutes">Minutes:</label>
+                <select id="minutes"></select>
+                <label for="hours">Hours:</label>
+                <select id="hours"></select>
+                <label for="dayOfMonth">Day of Month:</label>
+                <select id="dayOfMonth"></select>
+                <label for="month">Month:</label>
+                <select id="month"></select>
+                <label for="dayOfWeek">Day of Week:</label>
+                <select id="dayOfWeek"></select>
+            </div>
+            <div id="manualCronInput" style="display: none;">
+                <label for="cron">Cron Expression:</label>
+                <input type="text" id="cron" placeholder="* * * * *">
+            </div>
             <button type="submit">Add Job</button>
         </form>
         <h2>Scheduled Jobs</h2>
@@ -23,6 +45,7 @@
             <thead>
                 <tr>
                     <th>Job ID</th>
+                    <th>Job Description</th>
                     <th>Script Path</th>
                     <th>Cron</th>
                     <th>Actions</th>
@@ -32,6 +55,7 @@
         </table>
     </div>
     <script type="module" src="/static/index.js"></script>
+    <script type="module" src="/static/cronselector.js"></script>
 </body>
 
 </html>

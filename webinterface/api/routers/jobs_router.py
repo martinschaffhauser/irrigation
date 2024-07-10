@@ -25,6 +25,7 @@ router = APIRouter(prefix="/jobs")
 
 class Job(BaseModel):
     id: str
+    job_description: str
     script_path: str
     cron: str
 
@@ -47,7 +48,7 @@ def create_job(
         c = conn.cursor()
         c.execute(
             sql_statement,
-            (job.id, job.script_path, job.cron),
+            (job.id, job.job_description, job.script_path, job.cron),
         )
         conn.commit()
         conn.close()
