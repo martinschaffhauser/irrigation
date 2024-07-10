@@ -10,3 +10,6 @@ venv
 # Ignore __pycache__ directories
 __pycache__/
 **/__pycache__/
+
+# Ignore sqlite database
+**/jobs.db
