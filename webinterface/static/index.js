@@ -33,9 +33,12 @@ async function loadJobs() {
             <td>${job[0]}</td>
             <td>${job[1]}</td>
             <td>${job[2]}</td>
-            <td><button onclick="deleteJob('${job[0]}')">Delete</button></td>
+            <td><button class="delete-btn" data-job-id="${job[0]}">Delete</button></td>
         `;
         tbody.appendChild(row);
+    });
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', () => deleteJob(button.getAttribute('data-job-id')));
     });
 }
 
