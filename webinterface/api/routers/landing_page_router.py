@@ -22,14 +22,15 @@ templates = Jinja2Templates(directory="templates")
 async def get_landing_page(request: Request):
     # validate_token()
 
-    websocket_url = "wss://ankillm.klbg.link/create/ws"  # TODO: env var
+    # websocket_url = "wss://ankillm.klbg.link/create/ws"  # TODO: env var
 
-    logging.info(
-        "landing page was called - opening websocket for live display of countdown"
-    )
+    # logging.info(
+    #     "landing page was called - opening websocket for live display of countdown"
+    # )
 
     # Data to pass to the template
-    data = {
-        "websocket_url": websocket_url,
-    }
-    return templates.TemplateResponse("index.html", {"request": request, **data})
+    # data = {
+    #     "websocket_url": websocket_url,
+    # }
+    # return templates.TemplateResponse("index.html", {"request": request, **data})
+    return templates.TemplateResponse("index.html", {"request": request})
