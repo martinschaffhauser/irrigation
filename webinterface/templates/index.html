@@ -13,16 +13,20 @@
     <div class="container">
         <h1>Irrigation Job Scheduler</h1>
         <form id="jobForm">
-            <input type="text" id="jobId" placeholder="Job ID" required>
-            <input type="text" id="jobDescription" placeholder="Job Description" required>
-            <select id="scriptPath" required></select>
-            <div>
-                <input type="radio" id="autoCron" name="cronType" value="auto" checked>
-                <label for="autoCron">Automatic Cron Generation</label>
-                <input type="radio" id="manualCron" name="cronType" value="manual">
-                <label for="manualCron">Manual Cron Entry</label>
+            <div class="form-group">
+                <input type="text" id="jobId" placeholder="Job ID" required>
+                <input type="text" id="jobDescription" placeholder="Job Description" required>
+                <select id="scriptPath" required></select>
             </div>
-            <div id="cronInputs">
+            <div class="form-group">
+                <div class="radio-group">
+                    <input type="radio" id="autoCron" name="cronType" value="auto" checked>
+                    <label for="autoCron">Automatic Cron Generation</label>
+                    <input type="radio" id="manualCron" name="cronType" value="manual">
+                    <label for="manualCron">Manual Cron Entry</label>
+                </div>
+            </div>
+            <div id="cronInputs" class="form-group">
                 <label for="minutes">Minutes:</label>
                 <select id="minutes"></select>
                 <label for="hours">Hours:</label>
@@ -34,7 +38,7 @@
                 <label for="dayOfWeek">Day of Week:</label>
                 <select id="dayOfWeek"></select>
             </div>
-            <div id="manualCronInput" style="display: none;">
+            <div id="manualCronInput" class="form-group" style="display: none;">
                 <label for="cron">Enter Cron Expression:</label>
                 <input type="text" id="cron" placeholder="* * * * *">
             </div>
