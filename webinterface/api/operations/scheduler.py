@@ -32,7 +32,8 @@ def load_jobs_from_db():
     c.execute(sql_statement)
     jobs = c.fetchall()
     for job in jobs:
-        schedule_job(job[0], job[1], job[2])
+        # here job description does not need to be passed to the schedule_job function -> see db fields
+        schedule_job(job[0], job[2], job[3])
     conn.close()
 
 

@@ -31,7 +31,9 @@ async def list_mqtt_scripts(
     logging.info("list mqtt scripts endpoint hit")
 
     files = [
-        f for f in os.listdir(SCRIPT_DIR) if os.path.isfile(os.path.join(SCRIPT_DIR, f))
+        os.path.join(SCRIPT_DIR, f)
+        for f in os.listdir(SCRIPT_DIR)
+        if os.path.isfile(os.path.join(SCRIPT_DIR, f))
     ]
 
     headers = {"Custom-Header": "Value"}

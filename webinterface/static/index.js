@@ -13,13 +13,13 @@ async function populateScriptDropdown() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const scripts = data.scripts; // Corrected this line
+        const scripts = data.scripts; // This now contains full paths
         const scriptDropdown = document.getElementById('scriptPath');
         scriptDropdown.innerHTML = ''; // Clear any existing options
         scripts.forEach(script => {
             const option = document.createElement('option');
-            option.value = `api/operations/mqtt_scripts/${script}`;
-            option.textContent = script;
+            option.value = script; // Use the full path returned by the endpoint
+            option.textContent = script.split('/').pop(); // Display only the script name
             scriptDropdown.appendChild(option);
         });
     } catch (error) {
