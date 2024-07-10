@@ -3,7 +3,29 @@ const API_URL = 'https://irrigation.klbg.link';
 document.addEventListener('DOMContentLoaded', () => {
     loadJobs();
     setupCronTypeToggle();
+    populateScriptDropdown(); // Call to populate the script dropdown
 });
+
+async function populateScriptDropdown() {
+    try {
+        const response = await fetch(`${API_URL}/mqttscripts`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const scripts = data.scripts; // Corrected this line
+        const scriptDropdown = document.getElementById('scriptPath');
+        scriptDropdown.innerHTML = ''; // Clear any existing options
+        scripts.forEach(script => {
+            const option = document.createElement('option');
+            option.value = `api/operations/mqtt_scripts/${script}`;
+            option.textContent = script;
+            scriptDropdown.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Failed to populate script dropdown:', error);
+    }
+}
 
 function setupCronTypeToggle() {
     const autoCron = document.getElementById('autoCron');

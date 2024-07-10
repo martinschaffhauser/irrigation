@@ -15,12 +15,12 @@
         <form id="jobForm">
             <input type="text" id="jobId" placeholder="Job ID" required>
             <input type="text" id="jobDescription" placeholder="Job Description" required>
-            <input type="text" id="scriptPath" placeholder="Script Path" required>
+            <select id="scriptPath" required></select>
             <div>
                 <input type="radio" id="autoCron" name="cronType" value="auto" checked>
-                <label for="autoCron">Automatic</label>
+                <label for="autoCron">Automatic Cron Generation</label>
                 <input type="radio" id="manualCron" name="cronType" value="manual">
-                <label for="manualCron">Manual</label>
+                <label for="manualCron">Manual Cron Entry</label>
             </div>
             <div id="cronInputs">
                 <label for="minutes">Minutes:</label>
@@ -35,10 +35,10 @@
                 <select id="dayOfWeek"></select>
             </div>
             <div id="manualCronInput" style="display: none;">
-                <label for="cron">Cron Expression:</label>
+                <label for="cron">Enter Cron Expression:</label>
                 <input type="text" id="cron" placeholder="* * * * *">
             </div>
-            <button type="submit">Add Job</button>
+            <button type="submit">Add Job to Schedule</button>
         </form>
         <h2>Scheduled Jobs</h2>
         <table id="jobsTable">
