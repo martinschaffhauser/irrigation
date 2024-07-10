@@ -33,11 +33,11 @@ def load_jobs_from_db():
     jobs = c.fetchall()
     for job in jobs:
         # here job description does not need to be passed to the schedule_job function -> see db fields
-        schedule_job(job[0], job[2], job[3])
+        schedule_job(job[0], job[2], job[3], job[4])
     conn.close()
 
 
-def schedule_job(job_id, script_path, cron):
+def schedule_job(job_id, script_path, mqtt_args, cron):
     cron_parts = cron.split()
     if len(cron_parts) == 6:
         trigger = CronTrigger(
@@ -59,7 +59,7 @@ def schedule_job(job_id, script_path, cron):
     else:
         raise ValueError("Invalid cron expression: {}".format(cron))
 
-    scheduler.add_job(run_script, trigger, id=job_id, args=[script_path])
+    scheduler.add_job(run_script, trigger, id=job_id, args=[script_path, mqtt_args])
 
 
 def log_scheduled_jobs():

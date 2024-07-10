@@ -1,10 +1,12 @@
 import logging
 import sqlite3
+import json
 from fastapi import APIRouter, status, HTTPException
 from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
+from typing import Dict
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.triggers.cron import CronTrigger
 
@@ -28,6 +30,7 @@ class Job(BaseModel):
     job_description: str
     script_path: str
     cron: str
+    mqtt_args: Dict[str, int]
 
 
 @router.post("/create")
@@ -37,10 +40,14 @@ def create_job(
     # token: str = Depends(oauth2_scheme),
 ):
     # validate_token()
-    logging.info("create job endpoint was hit")
+    # logging.info(
+    #     f"create job endpoint was hit with id: {job.id}, job_description: {job.job_description}, script_path: {job.script_path}, cron: {job.cron}, mqtt_args: {job.mqtt_args}"
+    # )
 
     try:
-        schedule_job(job.id, job.script_path, job.cron)
+        # change dict to json for sqlite database
+        mqtt_args = json.dumps(job.mqtt_args)
+        schedule_job(job.id, job.script_path, job.mqtt_args, job.cron)
         sql_statement = read_sql_statement(
             "api/operations/sql_statements/create_job.sql"
         )
@@ -48,7 +55,7 @@ def create_job(
         c = conn.cursor()
         c.execute(
             sql_statement,
-            (job.id, job.job_description, job.script_path, job.cron),
+            (job.id, job.job_description, job.script_path, mqtt_args, job.cron),
         )
         conn.commit()
         conn.close()
