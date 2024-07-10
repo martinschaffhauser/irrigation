@@ -11,6 +11,7 @@ from api.routers.api_documentation_router import router as api_documentation_rou
 from api.routers.api_health_check_router import router as health_check_router
 from api.routers.jobs_router import router as job_router
 from api.routers.landing_page_router import router as landing_page_router
+from api.routers.mqtt_scripts_router import router as mqtt_scripts_router
 from api.operations.scheduler import start_scheduler, shutdown_scheduler
 from api.operations.database import init_db
 
@@ -29,6 +30,7 @@ app.include_router(landing_page_router)
 app.include_router(api_documentation_router)
 app.include_router(health_check_router)
 app.include_router(job_router)
+app.include_router(mqtt_scripts_router)
 
 ### EVENT HANDLERS ###
 app.add_event_handler("startup", start_scheduler)
