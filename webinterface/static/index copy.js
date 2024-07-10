@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadJobs();
     setupCronTypeToggle();
     populateScriptDropdown(); // Call to populate the script dropdown
-    populateCronSelectors(); // Populate cron selectors
 });
 
 async function populateScriptDropdown() {
@@ -47,33 +46,6 @@ function setupCronTypeToggle() {
             manualCronInput.style.display = 'block';
         }
     });
-}
-
-function populateCronSelectors() {
-    populateSelector('minutes', 0, 59, true);
-    populateSelector('hours', 0, 23, true);
-    populateSelector('dayOfMonth', 1, 31, true);
-    populateSelector('month', 1, 12, true);
-    populateSelector('dayOfWeek', 0, 6, true); // 0 is Sunday, 6 is Saturday
-}
-
-function populateSelector(id, start, end, includeWildcard) {
-    const selector = document.getElementById(id);
-    selector.innerHTML = ''; // Clear any existing options
-
-    if (includeWildcard) {
-        const wildcardOption = document.createElement('option');
-        wildcardOption.value = '*';
-        wildcardOption.textContent = '*';
-        selector.appendChild(wildcardOption);
-    }
-
-    for (let i = start; i <= end; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        selector.appendChild(option);
-    }
 }
 
 document.getElementById('jobForm').addEventListener('submit', async (e) => {
