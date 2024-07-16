@@ -4,7 +4,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 # custom imports
-from api.operations.jobs import run_script
+from api.operations.jobs import run_scheduled_script
 from api.operations.database import init_db, read_sql_statement
 from log_config import setup_logging
 
@@ -59,7 +59,9 @@ def schedule_job(job_id, script_path, mqtt_args, cron):
     else:
         raise ValueError("Invalid cron expression: {}".format(cron))
 
-    scheduler.add_job(run_script, trigger, id=job_id, args=[script_path, mqtt_args])
+    scheduler.add_job(
+        run_scheduled_script, trigger, id=job_id, args=[script_path, mqtt_args]
+    )
 
 
 def log_scheduled_jobs():

@@ -6,13 +6,14 @@ from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.triggers.cron import CronTrigger
 
 # custom imports
 from api.operations.database import read_sql_statement
 from api.operations.scheduler import scheduler, schedule_job, log_scheduled_jobs
+from api.operations.jobs import run_script
 from api.routers.limiter import limiter
 from api.operations.token_validation import validate_token
 from log_config import setup_logging
@@ -26,11 +27,29 @@ router = APIRouter(prefix="/jobs")
 
 
 class Job(BaseModel):
-    id: str
-    job_description: str
-    script_path: str
-    cron: str
-    mqtt_args: Dict[str, int]
+    id: Optional[str] = None
+    job_description: Optional[str] = None
+    script_path: Optional[str] = None
+    cron: Optional[str] = None
+    mqtt_args: Optional[Dict[str, int]] = None
+
+
+@router.post("/run")
+# @limiter.limit("10/second")
+def run_job(
+    job: Job,
+    # token: str = Depends(oauth2_scheme),
+):
+    # validate_token()
+
+    try:
+        # change dict to json for sqlite database
+        # mqtt_args = json.dumps(job.mqtt_args)
+        run_script(script_path=job.script_path, mqtt_args=job.mqtt_args)
+
+        return {"message": "Job run script initiated"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/create")
