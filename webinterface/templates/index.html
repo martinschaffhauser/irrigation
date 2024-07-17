@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irrigation Job Scheduler</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script>
+        // Set the API_URL as a global variable
+        window.API_URL = "{{ api_url }}";
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Irrigation Job Scheduler</h1>
+
+        <h2>Turn Pump On</h2>
+        <div class="form-group">
+            <label for="pumpDuration">Select Duration (minutes):</label>
+            <select id="pumpDuration">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+            <button id="turnPumpOnButton">Turn Pump On</button>
+        </div>
+
+        <form id="jobForm">
+            <div class="form-group">
+                <input type="text" id="jobId" placeholder="Job ID" required>
+                <input type="text" id="jobDescription" placeholder="Job Description" required>
+                <select id="scriptPath" required></select>
+            </div>
+            <div class="form-group">
+                <div class="radio-group">
+                    <input type="radio" id="autoCron" name="cronType" value="auto" checked>
+                    <label for="autoCron">Automatic Cron Generation</label>
+                    <input type="radio" id="manualCron" name="cronType" value="manual">
+                    <label for="manualCron">Manual Cron Entry</label>
+                </div>
+            </div>
+            <div id="cronInputs" class="form-group">
+                <label for="minutes">Minutes:</label>
+                <select id="minutes"></select>
+                <label for="hours">Hours:</label>
+                <select id="hours"></select>
+                <label for="dayOfMonth">Day of Month:</label>
+                <select id="dayOfMonth"></select>
+                <label for="month">Month:</label>
+                <select id="month"></select>
+                <label for="dayOfWeek">Day of Week:</label>
+                <select id="dayOfWeek"></select>
+            </div>
+            <div id="manualCronInput" class="form-group" style="display: none;">
+                <label for="cron">Enter Cron Expression:</label>
+                <input type="text" id="cron" placeholder="* * * * *">
+            </div>
+            <div id="scriptArguments" class="form-group">
+                <label for="totalTime">Total Time (minutes):</label>
+                <input type="number" id="totalTime" placeholder="Total Time in minutes" required>
+                <label for="cycleDuration">Cycle Duration (seconds):</label>
+                <input type="number" id="cycleDuration" placeholder="Cycle Duration in seconds" required>
+                <label for="pauseDuration">Pause Duration (seconds):</label>
+                <input type="number" id="pauseDuration" placeholder="Pause Duration in seconds" required>
+            </div>
+            <button type="submit">Add Job to Schedule</button>
+        </form>
+
+        <h2>Scheduled Jobs</h2>
+        <table id="jobsTable">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Job Description</th>
+                    <th>Script Path</th>
+                    <th>MQTT Args</th>
+                    <th>Cron</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script type="module" src="/static/index.js"></script>
+    <script type="module" src="/static/cronselector.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+venv
+**/platformio.ini
+**/passwd
+**/cred.env
+
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+
+# Ignore __pycache__ directories
+__pycache__/
+**/__pycache__/
+
+# Ignore sqlite database
+**/jobs.db
