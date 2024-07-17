@@ -1,15 +1,25 @@
+# venv
 venv
+
+# platformio
 **/platformio.ini
+
+# mosquitto 
 **/passwd
+**/mosquitto.log
+
+
+# .env file
 **/cred.env
 
-# Ignore Python bytecode files
+# Python bytecode files
 *.pyc
 *.pyo
 
-# Ignore __pycache__ directories
+# __pycache__ directories
 __pycache__/
 **/__pycache__/
+**/__pycache__/*
 
-# Ignore sqlite database
+# sqlite database
 **/jobs.db
