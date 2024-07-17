@@ -12,6 +12,18 @@
 <body>
     <div class="container">
         <h1>Irrigation Job Scheduler</h1>
+
+        <h2>Turn Pump On</h2>
+        <div class="form-group">
+            <label for="pumpDuration">Select Duration (minutes):</label>
+            <select id="pumpDuration">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+            <button id="turnPumpOnButton">Turn Pump On</button>
+        </div>
+
         <form id="jobForm">
             <div class="form-group">
                 <input type="text" id="jobId" placeholder="Job ID" required>
@@ -52,6 +64,7 @@
             </div>
             <button type="submit">Add Job to Schedule</button>
         </form>
+
         <h2>Scheduled Jobs</h2>
         <table id="jobsTable">
             <thead>

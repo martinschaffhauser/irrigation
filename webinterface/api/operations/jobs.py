@@ -31,6 +31,9 @@ def run_script(script_path, mqtt_args):
         )  # Convert JSON string to dictionary if necessary
 
     total_time = mqtt_args["total_time"]
+    total_time = (
+        total_time * 60
+    )  # the time selected on html and js is ment to be in minutes
 
     venv_path = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),

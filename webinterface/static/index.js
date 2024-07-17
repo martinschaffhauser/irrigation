@@ -3,8 +3,9 @@ const API_URL = 'https://irrigation.klbg.link';
 document.addEventListener('DOMContentLoaded', () => {
     loadJobs();
     setupCronTypeToggle();
-    populateScriptDropdown(); // Call to populate the script dropdown
-    populateCronSelectors(); // Populate cron selectors
+    populateScriptDropdown();
+    populateCronSelectors();
+    setupPumpButton();
 });
 
 async function populateScriptDropdown() {
@@ -14,13 +15,13 @@ async function populateScriptDropdown() {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        const scripts = data.scripts; // This now contains full paths
+        const scripts = data.scripts;
         const scriptDropdown = document.getElementById('scriptPath');
-        scriptDropdown.innerHTML = ''; // Clear any existing options
+        scriptDropdown.innerHTML = '';
         scripts.forEach(script => {
             const option = document.createElement('option');
-            option.value = script; // Use the full path returned by the endpoint
-            option.textContent = script.split('/').pop(); // Display only the script name
+            option.value = script;
+            option.textContent = script.split('/').pop();
             scriptDropdown.appendChild(option);
         });
     } catch (error) {
@@ -54,12 +55,12 @@ function populateCronSelectors() {
     populateSelector('hours', 0, 23, true);
     populateSelector('dayOfMonth', 1, 31, true);
     populateSelector('month', 1, 12, true);
-    populateSelector('dayOfWeek', 0, 6, true); // 0 is Sunday, 6 is Saturday
+    populateSelector('dayOfWeek', 0, 6, true);
 }
 
 function populateSelector(id, start, end, includeWildcard) {
     const selector = document.getElementById(id);
-    selector.innerHTML = ''; // Clear any existing options
+    selector.innerHTML = '';
 
     if (includeWildcard) {
         const wildcardOption = document.createElement('option');
@@ -156,4 +157,34 @@ async function deleteJob(jobId) {
     } else {
         alert('Error deleting job');
     }
+}
+
+function setupPumpButton() {
+    const pumpButton = document.getElementById('turnPumpOnButton');
+    pumpButton.addEventListener('click', async () => {
+        const duration = document.getElementById('pumpDuration').value;
+        const job = {
+            script_path: 'api/operations/mqtt_scripts/pump_on_set_time.py',
+            mqtt_args: {
+                total_time: parseInt(duration),
+            }
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/jobs/run`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(job)
+            });
+
+            if (response.ok) {
+                alert('Pump turned on successfully');
+            } else {
+                alert('Error turning on pump');
+            }
+        } catch (error) {
+            console.error('Failed to turn on pump:', error);
+            alert('Error turning on pump');
+        }
+    });
 }
