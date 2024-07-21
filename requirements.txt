@@ -29,6 +29,7 @@ orjson==3.10.6
 packaging==24.1
 paho-mqtt==2.1.0
 platformio==6.1.15
+prometheus_client==0.20.0
 pydantic==2.8.2
 pydantic_core==2.20.1
 pyelftools==0.31
